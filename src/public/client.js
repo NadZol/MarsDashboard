@@ -72,10 +72,15 @@ const ImageOfTheDay = (apod) => {
     console.log(photodate.getDate(), today.getDate());
 
     console.log(photodate.getDate() === today.getDate());
-    if (!apod || apod.date === today.getDate() ) {
+    if (!apod || apod.date === today.getDate()) {
         getImageOfTheDay(store)
     }
 
+    //return ImageOfTheDayHtml(apod);
+    return DummyHtml(apod);
+}
+
+const ImageOfTheDayHtml = (apod) => {
     // check if the photo of the day is actually type video!
     if (apod.media_type === "video") {
         return (`
@@ -89,6 +94,12 @@ const ImageOfTheDay = (apod) => {
             <p>${apod.image.explanation}</p>
         `)
     }
+}
+
+const DummyHtml = (obj) => {
+    return (`
+        <p>${JSON.stringify(obj)}</p>
+    `)
 }
 
 // ------------------------------------------------------  API CALLS
