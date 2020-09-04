@@ -2,6 +2,7 @@ let store = {
     user: { name: "Student" },
     apod: '',
     photos: '',
+    info: '',
     rovers: ['Curiosity', 'Opportunity', 'Spirit'],
 }
 
@@ -20,7 +21,7 @@ const render = async (root, state) => {
 
 // create content
 const App = (state) => {
-    let { rovers, apod } = state
+    let { rovers, photos, info, apod } = state
 
     return `
         <header></header>
@@ -37,7 +38,8 @@ const App = (state) => {
                     explanation are returned. These keywords could be used as auto-generated hashtags for twitter or instagram feeds;
                     but generally help with discoverability of relevant imagery.
                 </p>
-                ${ImageOfTheDay(apod)}
+                ${RoverInfo(info)}
+                ${RoverPhotos(photos)}
             </section>
         </main>
         <footer></footer>
