@@ -1,6 +1,7 @@
 let store = {
     user: { name: "Student" },
     apod: '',
+    photos: '',
     rovers: ['Curiosity', 'Opportunity', 'Spirit'],
 }
 
@@ -63,6 +64,8 @@ const Greeting = (name) => {
     `
 }
 
+// ------------------------------------------------------  Data CALLS
+
 // Example of a pure function that renders infomation requested from the backend
 const ImageOfTheDay = (apod) => {
 
@@ -79,6 +82,40 @@ const ImageOfTheDay = (apod) => {
     //return ImageOfTheDayHtml(apod);
     return DummyHtml(apod);
 }
+
+const RoverPhotos = (obj) => {
+
+    // If image does not already exist, or it is not from today -- request it again
+    const today = new Date()
+    const photodate = new Date(obj.date)
+    console.log(photodate.getDate(), today.getDate());
+
+    console.log(photodate.getDate() === today.getDate());
+    if (!obj || obj.date === today.getDate()) {
+        getPhotos(store)
+    }
+
+    //return ImageOfTheDayHtml(apod);
+    return DummyHtml(obj);
+}
+
+const RoverInfo = (obj) => {
+
+    // If image does not already exist, or it is not from today -- request it again
+    const today = new Date()
+    const photodate = new Date(obj.date)
+    console.log(photodate.getDate(), today.getDate());
+
+    console.log(photodate.getDate() === today.getDate());
+    if (!obj || obj.date === today.getDate()) {
+        getInfo(store)
+    }
+
+    //return ImageOfTheDayHtml(apod);
+    return DummyHtml(obj);
+}
+
+// ------------------------------------------------------  UI CALLS
 
 const ImageOfTheDayHtml = (apod) => {
     // check if the photo of the day is actually type video!
@@ -111,6 +148,26 @@ const getImageOfTheDay = (state) => {
     fetch(`http://localhost:3000/apod`)
         .then(res => res.json())
         .then(apod => updateStore(store, { apod }))
+
+    return data
+}
+
+const getPhotos = (state) => {
+    let { photos } = state
+
+    fetch(`http://localhost:3000/photos`)
+        .then(res => res.json())
+        .then(photos => updateStore(store, { photos }))
+
+    return data
+}
+
+const getInfo = (state) => {
+    let { info } = state
+
+    fetch(`http://localhost:3000/info`)
+        .then(res => res.json())
+        .then(info => updateStore(store, { info }))
 
     return data
 }
