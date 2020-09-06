@@ -101,8 +101,14 @@ const RoverInfo = (obj) => {
 // ------------------------------------------------------  UI CALLS
 
 const RoverPhotosHtml = (obj) => {
-    console.log(obj.data.photos);
-    return null;
+    let i;
+    let s = "";
+    for (i = 0; i < obj.data.photos.length; i++) {
+        console.log(obj.data.photos[i]);
+        s = s + `<img src=${obj.data.photos[i].img_src}>`;
+
+    }
+    return s;
 }
 
 const RoverInfoHtml = (obj) => {
