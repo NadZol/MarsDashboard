@@ -18,7 +18,6 @@ const render = async (root, state) => {
     root.innerHTML = App(state)
 }
 
-
 // create content
 const App = (state) => {
     let { rovers, photos, info, apod } = state
@@ -68,23 +67,6 @@ const Greeting = (name) => {
 
 // ------------------------------------------------------  Data CALLS
 
-// Example of a pure function that renders infomation requested from the backend
-const ImageOfTheDay = (apod) => {
-
-    // If image does not already exist, or it is not from today -- request it again
-    const today = new Date()
-    const photodate = new Date(apod.date)
-    console.log(photodate.getDate(), today.getDate());
-
-    console.log(photodate.getDate() === today.getDate());
-    if (!apod || apod.date === today.getDate()) {
-        getImageOfTheDay(store)
-    }
-
-    //return ImageOfTheDayHtml(apod);
-    return DummyHtml(apod);
-}
-
 const RoverPhotos = (obj) => {
 
     // If image does not already exist, or it is not from today -- request it again
@@ -98,7 +80,7 @@ const RoverPhotos = (obj) => {
     }
 
     //return ImageOfTheDayHtml(apod);
-    return DummyHtml(obj);
+    return RoverPhotosHtml(obj);
 }
 
 const RoverInfo = (obj) => {
@@ -113,63 +95,38 @@ const RoverInfo = (obj) => {
         getInfo(store)
     }
 
-    //return ImageOfTheDayHtml(apod);
-    return DummyHtml(obj);
+    return RoverInfoHtml(obj);
 }
 
 // ------------------------------------------------------  UI CALLS
 
-const ImageOfTheDayHtml = (apod) => {
-    // check if the photo of the day is actually type video!
-    if (apod.media_type === "video") {
-        return (`
-            <p>See today's featured video <a href="${apod.url}">here</a></p>
-            <p>${apod.title}</p>
-            <p>${apod.explanation}</p>
-        `)
-    } else {
-        return (`
-            <img src="${apod.image.url}" height="350px" width="100%" />
-            <p>${apod.image.explanation}</p>
-        `)
-    }
+const RoverPhotosHtml = (obj) => {
+    console.log(obj.data.photos);
+    return null;
 }
 
-const DummyHtml = (obj) => {
+const RoverInfoHtml = (obj) => {
+    //console.log(obj.photos.photo_manifest.launch_date);
+    if (obj.data === undefined) {
+        return null;
+    }
     return (`
-        <p>${JSON.stringify(obj)}</p>
+        <p>${obj.data.photo_manifest.name}</p>
+        <p>${obj.data.photo_manifest.launch_date}</p>
+        <p>${obj.data.photo_manifest.landing_date}</p>
     `)
 }
 
 // ------------------------------------------------------  API CALLS
 
-// Example API call
-const getImageOfTheDay = (state) => {
-    let { apod } = state
-
-    fetch(`http://localhost:3000/apod`)
-        .then(res => res.json())
-        .then(apod => updateStore(store, { apod }))
-
-    return data
-}
-
-const getPhotos = (state) => {
-    let { photos } = state
-
+const getPhotos = async (state) => {
     fetch(`http://localhost:3000/photos`)
         .then(res => res.json())
         .then(photos => updateStore(store, { photos }))
-
-    return data
 }
 
-const getInfo = (state) => {
-    let { info } = state
-
+const getInfo = async (state) => {
     fetch(`http://localhost:3000/info`)
         .then(res => res.json())
         .then(info => updateStore(store, { info }))
-
-    return data
 }
