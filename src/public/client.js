@@ -4,6 +4,7 @@ let store = {
     photos: '',
     info: '',
     rovers: ['Curiosity', 'Opportunity', 'Spirit'],
+    rover: 'Curiosity',
 }
 
 // add our markup to the page
@@ -27,6 +28,12 @@ const App = (state) => {
         <main>
             ${Greeting(store.user.name)}
             <section>
+                <select id="rovers" onchange="chooseRover()">
+                    <option value="curiosity" ${selectedRover('Curiosity')}>Curiosity</option>
+                    <option value="opportunity" ${selectedRover('Opportunity')}>Opportunity</option>
+                    <option value="spirit" ${selectedRover('Spirit')}>Spirit</option>
+                </select>
+                ${RoverName(store.rover)}
                 <h3>Put things on the page!</h3>
                 <p>Here is an example section.</p>
                 <p>
@@ -43,6 +50,19 @@ const App = (state) => {
         </main>
         <footer></footer>
     `
+}
+
+function chooseRover() {
+    const x = document.getElementById("rovers");
+    const rover = x.options[x.selectedIndex].text;
+    updateStore(store, { rover });
+}
+
+function selectedRover(rover) {
+    if (rover === store.rover) {
+        return "selected";
+    }
+    return null;
 }
 
 // listening for load event because page should load before any JS is called
@@ -62,6 +82,18 @@ const Greeting = (name) => {
 
     return `
         <h1>Hello!</h1>
+    `
+}
+
+const RoverName = (rover) => {
+    if (rover) {
+        return `
+            <h1>Rover ${rover}!</h1>
+        `
+    }
+
+    return `
+        <h1>No Rover selected</h1>
     `
 }
 
@@ -101,6 +133,9 @@ const RoverInfo = (obj) => {
 // ------------------------------------------------------  UI CALLS
 
 const RoverPhotosHtml = (obj) => {
+    if (obj.data === undefined) {
+        return null;
+    }
     let i;
     let s = "";
     for (i = 0; i < obj.data.photos.length; i++) {
